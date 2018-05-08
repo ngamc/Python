@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-def symbol_to_path(symbol, base_dir="data"):
+def symbol_to_path(symbol, base_dir="us_stock"):
        return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
 def get_data(symbols, dates):
