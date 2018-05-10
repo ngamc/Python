@@ -21,7 +21,7 @@ mu, sigma, size = 0, 4, 100
 m, b = 5, 101
 
 ## Create a uniformally distributed set of X values between 0 and 10 and store in pandas dataframe
-x = np.random.uniform(0,10, size)
+x = np.random.uniform(0,1, size)
 df = pd.DataFrame({'x':x})
 
 ## Find the "perfect" y value corresponding to each x value given
@@ -55,7 +55,7 @@ model.compile(loss='mse', optimizer=sgd) ## To try our model with an Adam optimi
 ## Fit our model to the noisy data we create above. Notes: 
 ## The validation split parameter reserves 20% of our data for validation (ie 80% will be used for training)
 ## I don't really know if using a batch size of 1 makes sense
-history = model.fit(x=df['x'], y=df['y'], validation_split=0.2, batch_size=1, epochs=500)
+history = model.fit(x=df['x'], y=df['y'], validation_split=0.2, batch_size=1, epochs=100)
 
 ## ---------- Review our weights -------------------
 ## Save and print our final weights

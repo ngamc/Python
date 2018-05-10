@@ -53,8 +53,8 @@ class PlotLosses(keras.callbacks.Callback):
 plot_losses = PlotLosses()
 
 train_size=100
-max_number=10
-epoch_number=500;
+max_number=100
+epoch_number=100;
 batch_size=1
 x_train = np.array([])
 y_train = np.array([])
@@ -63,9 +63,9 @@ mean,std = 0, 4
 
 for i in range(train_size):
     r=np.random.uniform(0,max_number)
-    x_train=np.append(x_train,[r])
+    x_train=np.append(x_train,[r/max_number])
     noise=np.random.normal(mean, std)
-    y_train=np.append(y_train,r*m+b+noise)
+    y_train=np.append(y_train,r/max_number*m+b+noise)
 
 
 #x_train=np.sort(x_train)
@@ -79,7 +79,7 @@ model = Sequential()
 model.add(Dense(1, input_dim=(1)))
 model.summary()
 
-sgd = SGD(lr=0.001)
+sgd = SGD(lr=0.005)
 model.compile(loss='mse',
               optimizer=sgd)
 
