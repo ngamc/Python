@@ -89,6 +89,6 @@ y=xmax*3+4
 plt.plot([0, xmax], [0,y], color='k', linestyle='-', linewidth=2 )
 print(x_train)
 print(y_train)
-print('xmax: ', xmax)
+#print('xmax: ', xmax)
 
 

@@ -52,27 +52,24 @@ class PlotLosses(keras.callbacks.Callback):
 
 plot_losses = PlotLosses()
 
-train_size=15
-max_number=100
-epoch_number=3000;
-x_train=np.array([])
-y_train=np.array([])
-past_no=[]
+train_size=100
+max_number=10
+epoch_number=500;
+batch_size=1
+x_train = np.array([])
+y_train = np.array([])
+m, b = 5, 101
+mean,std = 0, 4
 
 for i in range(train_size):
-    while True:
-        r=np.random.randint(max_number)
-        if r in past_no:
-            pass
-        else:
-            past_no.append(r)
-            x_train=np.append(x_train,[r])
-            y_train=np.append(y_train,r*3+2)
-            break
+    r=np.random.uniform(0,max_number)
+    x_train=np.append(x_train,[r])
+    noise=np.random.normal(mean, std)
+    y_train=np.append(y_train,r*m+b+noise)
 
 
-x_train=np.sort(x_train)
-y_train=np.sort(y_train)
+#x_train=np.sort(x_train)
+#y_train=np.sort(y_train)
 #--------------------------------
 x_test=np.array([4,7,9,12,18])
 y_test=np.array([14,23,29,38,56])
@@ -82,18 +79,23 @@ model = Sequential()
 model.add(Dense(1, input_dim=(1)))
 model.summary()
 
-sgd = SGD(lr=0.0001, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error',
-              optimizer='Adamax',
-              metrics=['accuracy'])
+sgd = SGD(lr=0.001)
+model.compile(loss='mse',
+              optimizer=sgd)
 
-model.fit(x_train, y_train, epochs=epoch_number, batch_size=15, callbacks=[plot_losses], verbose=1)
+model.fit(x_train, y_train, epochs=epoch_number, validation_split=0.2, batch_size=batch_size, callbacks=[plot_losses], verbose=1)
 
 score=model.evaluate(x_test, y_test, verbose=0)
 
-print('Test loss:', score[0])
-print('Test accuracy:', score[1]*100)
-print('Answer is: ', model.predict(x_try))
-print('Weights are: ', model.get_weights())
+#print('Test loss:', score[0])
+#print('Test accuracy:', score[1]*100)
+#print('Answer is: ', model.predict(x_try))
+print('Weights are: m: %.2f  b:%.2f '% (model.get_weights()[0][0][0], model.get_weights()[1][0]))
 
 plot_losses.plot();
+
+#print(x_train)
+#print(x_train.shape)
+#print(y_train)
+#print(y_train.shape)
+
