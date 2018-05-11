@@ -17,16 +17,18 @@ from keras.optimizers import SGD
 import sys
 from plotlosses import PlotLosses
 from matplotlib import pyplot as plt 
+import seaborn as sns
 
 plot_losses = PlotLosses()
 
 train_size=50
 max_number=500
-epoch_number=10
+epoch_number=1000
 batch_size=100
 x_train=np.empty(shape=(0,2))
 y_train=np.array([])
 past_no=[]
+
 
 for i in range(train_size):
     while True:
@@ -44,21 +46,43 @@ for i in range(train_size):
                 y_train=np.append(y_train, 1)
             break
 
+x_test=np.empty(shape=(0,2))
+y_test=np.array([])
+past_no=[]
 
+for i in range(train_size):
+    while True:
+        r1=np.random.randint(max_number) / max_number
+        r2=np.random.randint(max_number*3) / (max_number)
+        if r1 in past_no:
+            pass
+        else:
+            past_no.append(r1)
+            aa=[r1,r2]
+            x_test=np.append(x_test,[[r1,r2]], axis=0)
+            if r2 > (3*r1 + 4/max_number):
+                y_test=np.append(y_test, 0)
+            else: 
+                y_test=np.append(y_test, 1)
+            break
+        
 #x_train=np.sort(x_train)
 #y_train=np.sort(y_train)
-print(x_train)
-print(y_train)
+#print(x_train)
+#print(y_train)
 #sys.exit()
 #--------------------------------
-x_test=np.array([[4,15],[7,3],[9,70],[12,45],[18,6]])
 
-y_test=np.array([1,1,0,0,1])
-x_try=np.array([[40,250]])
+x_try=np.array([[400,50]])
 
 model = Sequential()
-model.add(Dense(1, input_dim=(2)))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, input_dim=(2), activation='tanh' ))
+'''
+Although SLP can provide a good output, MLP will provide better result in general
+
+'''
+#model.add(Dense(2))
+#model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
 sgd = SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True)
@@ -73,7 +97,7 @@ score=model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1]*100)
 print('Answer is: ', model.predict(x_try))
-print('Weights are: ', model.get_weights())
+#print('Weights are: ', model.get_weights())
 
 plot_losses.plot();
 
@@ -90,8 +114,6 @@ for x1, x2 in x_train:
 xmax=np.max(x_train, axis=0)[0] * max_number
 y=xmax*3+4
 plt.plot([0, xmax], [0,y], color='k', linestyle='-', linewidth=2 )
-print(x_train)
-print(y_train)
-#print('xmax: ', xmax)
+
 
 
