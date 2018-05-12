@@ -3,7 +3,7 @@
 Created on Fri May 11 11:27:07 2018
 Try out with IRIS database
 
-@author: user
+@author: Nelson Cheung
 """
 
 from sklearn.datasets import load_iris
