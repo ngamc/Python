@@ -13,11 +13,11 @@ from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error
 import sys
 
-train_size=100
+train_size=50
 max_number=100
-epoch_number=100;
-batch_size=1
-m, b = 5, 3
+#epoch_number=100;
+#batch_size=1
+m, n, b = 5, 4, 3
 mean,std = 0, 4
 
 x_train_list=[[]]
@@ -32,9 +32,8 @@ for i in range(train_size):
     else:
         x_train_list.append([r/max_number])
     noise = np.random.normal(mean, std)
-    y_train_list.append(r/max_number*m+b+noise)
-    print(noise)
-    
+    y_train_list.append(r/max_number*m + r*r/max_number/max_number*n + b + noise)
+        
 
 for i in range(train_size):
     r=np.random.uniform(0,max_number)
@@ -43,7 +42,7 @@ for i in range(train_size):
     else:
         x_test_list.append([r/max_number])
     noise = np.random.normal(mean, std)
-    y_test_list.append(r/max_number*m+b+noise)
+    y_test_list.append(r/max_number*m + r*r/max_number/max_number*n + b + noise)
     
 x_train = np.array(x_train_list)
 y_train = np.array(y_train_list)
@@ -68,4 +67,4 @@ m=regr.coef_[0]
 b=regr.intercept_
 print("slope=",m, "intercept=",b)
 
-print('Predict 53 to %.2f' %(regr.predict([10])))
+print('Predict 53 to %.2f' %(regr.predict([[10]])))
