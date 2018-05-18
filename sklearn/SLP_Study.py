@@ -15,10 +15,10 @@ import sys
 
 train_size=50
 max_number=100
-#epoch_number=100;
-#batch_size=1
 m, n, b = 5, 4, 3
-mean,std = 0, 4
+mean,std = 0, 0.1
+#np.random.seed(7)          # No random
+
 
 x_train_list=[[]]
 y_train_list=[]
@@ -32,7 +32,7 @@ for i in range(train_size):
     else:
         x_train_list.append([r/max_number])
     noise = np.random.normal(mean, std)
-    y_train_list.append(r/max_number*m + r*r/max_number/max_number*n + b + noise)
+    y_train_list.append(r/max_number*m + b + noise)
         
 
 for i in range(train_size):
@@ -42,7 +42,7 @@ for i in range(train_size):
     else:
         x_test_list.append([r/max_number])
     noise = np.random.normal(mean, std)
-    y_test_list.append(r/max_number*m + r*r/max_number/max_number*n + b + noise)
+    y_test_list.append(r/max_number*m +  b + noise)
     
 x_train = np.array(x_train_list)
 y_train = np.array(y_train_list)
@@ -59,12 +59,12 @@ regr = linear_model.LinearRegression()
 regr.fit(x_train, y_train)
 
 y_predit=regr.predict(x_test)
-print('Coefficients: \n', regr.coef_)
-
-print('MSE: ', mean_squared_error(y_test, y_predit) )
+print('MSE:  %.2f' % mean_squared_error(y_test, y_predit) )
 
 m=regr.coef_[0]
 b=regr.intercept_
-print("slope=",m, "intercept=",b)
+print("slope= %.2f intercept= %.2f"% (m, b))
 
 print('Predict 53 to %.2f' %(regr.predict([[10]])))
+
+print('Coefficient: ', regr.coef_)
