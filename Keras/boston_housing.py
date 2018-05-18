@@ -15,7 +15,7 @@ from keras.optimizers import SGD, Adamax
 import sys
 
 
-epoch_number = 500
+epoch_number = 5
 batch_size = 12
 
 (x_train, y_train),(x_test, y_test) = boston_housing.load_data()
@@ -37,4 +37,5 @@ print('Test loss:', score)
 
 plot_losses.plot()
 
-
+print(x_train.shape)
+print(y_train.shape)
