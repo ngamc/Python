@@ -28,6 +28,8 @@ def get_file_list(path=root_path):
     
     return min_files
 
+# read a sp min data file and return a dataframe
+# return empty dataframe if the size of the file is too small < df_size_min
 def read_df(file):
     if is_non_zero_file(file):
         df = read_csv(file, header=None,  delimiter=';', engine='python')
