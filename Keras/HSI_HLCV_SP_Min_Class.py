@@ -21,7 +21,7 @@ from plotlosses import PlotLosses
 from matplotlib import pyplot as plt
 import sys
 import time
-
+ 
 starttime = time.time()
 
 data_file_path = "Z:\\2018\\4"
