@@ -28,9 +28,9 @@ import time
 
 starttime = time.time()
 
-data_file_path = "Z:\\2018\\5"
+data_file_path = "Z:\\"
 #data_file_path = "/HSI/2018/5"
-num_candlestick = 15       # number of candle stick submitted as x's features
+num_candlestick = 10       # number of candle stick submitted as x's features
 cut_loss_pt = 5     # if next low < current close - cut_loss_pt we will not buy
 target_pt   = 5     # if next high - target_pt > current close we will buy
 day_start = '09/18/00'      # this is consider as the first candlestick
