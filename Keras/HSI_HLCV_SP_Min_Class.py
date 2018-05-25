@@ -16,6 +16,7 @@ from keras.layers import Dense, Dropout
 from keras.optimizers import SGD
 from sklearn.model_selection import train_test_split
 from sklearn import svm
+from sklearn.metrics import accuracy_score
 from sklearn.metrics import mean_squared_error
 from plotlosses import PlotLosses
 from matplotlib import pyplot as plt
@@ -24,7 +25,7 @@ import time
  
 starttime = time.time()
 
-data_file_path = "Z:\\2018\\4"
+data_file_path = "Z:\\2018"
 num_candlestick = 5       # number of candle stick submitted as x's features
 cut_loss_pt = 5     # if next low < current close - cut_loss_pt we will not buy
 target_pt   = 5     # if next high - target_pt > current close we will buy
@@ -198,11 +199,16 @@ def run_sklearn(x, y):
     
     clf = svm.SVC(verbose=True)
     x_train, x_test, y_train, y_test = train_test_split(x_list, y_list, test_size=0.33)
-    clf.fit(x_train, y_train) 
+    model = clf.fit(x_train, y_train) 
 
-    y_predict = clf.predict(x_test)
+    y_predict = model.predict(x_test)
 
-    print('MSE:  %.2f' % mean_squared_error(y_test, y_predict) )
+#    print('MSE:  %.2f' % mean_squared_error(y_test, y_predict) )
+ 
+    accuracy = accuracy_score(y_test, y_predict)
+    error_rate = 1 - accuracy
+    
+    print("Error rate: %.2f%%" % (error_rate*100))
     
 
 if __name__ == '__main__':
