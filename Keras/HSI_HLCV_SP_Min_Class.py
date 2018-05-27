@@ -30,7 +30,7 @@ starttime = time.time()
 
 data_file_path = "Z:\\"
 #data_file_path = "/HSI/2018/5"
-num_candlestick = 10       # number of candle stick submitted as x's features
+num_candlestick = 15       # number of candle stick submitted as x's features
 cut_loss_pt = 5     # if next low < current close - cut_loss_pt we will not buy
 target_pt   = 5     # if next high - target_pt > current close we will buy
 day_start = '09/18/00'      # this is consider as the first candlestick
@@ -41,7 +41,7 @@ save_sklearn_model = 'hlcv_sp_min_sklearn.pickle'
     
 # Neural Network Parameters:
 batch_size = 1024 
-epoch_number = 100
+epoch_number = 800
 
 def normalized1to0(value, list):
     return ((value - min(list)) / (max(list) - min(list)))
@@ -80,7 +80,7 @@ def maybe_process_and_save():
             idx=0
             x_list=x_raw.tolist()
             
-            for open, high, low, close, volume in x_list:
+            for openn, high, low, close, volume in x_list:
                 x_instance = []
                 
                 # Find out the max and min price, volume for candlestick group
@@ -90,9 +90,9 @@ def maybe_process_and_save():
 
                 for j in range(num_candlestick):
                     x_list_next = x_list[idx+j]
-                    priceset.append(x_list_next[1] - open)
-                    priceset.append(x_list_next[2] - open)
-                    priceset.append(x_list_next[3] - open)
+                    priceset.append(x_list_next[1] - openn)
+                    priceset.append(x_list_next[2] - openn)
+                    priceset.append(x_list_next[3] - openn)
                     volumeset.append(x_list_next[4])   
                 
                 if ((max(priceset) == min(priceset)) or (max(volumeset) == min(volumeset))):
@@ -104,14 +104,14 @@ def maybe_process_and_save():
                     x_list_next = x_list[idx+i]
                     
                     # Below 3 lines are no normalizations
-#                    x_instance.append(x_list_next[1] - open)
-#                    x_instance.append(x_list_next[2] - open)
-#                    x_instance.append(x_list_next[3] - open)
+#                    x_instance.append(x_list_next[1] - openn)
+#                    x_instance.append(x_list_next[2] - openn)
+#                    x_instance.append(x_list_next[3] - openn)
                     
                     # Below 3 lines are for normalization
-                    x_instance.append(normalized1toMinus1((x_list_next[1] - open), priceset))
-                    x_instance.append(normalized1toMinus1((x_list_next[2] - open), priceset))
-                    x_instance.append(normalized1toMinus1((x_list_next[3] - open), priceset))
+                    x_instance.append(normalized1toMinus1((x_list_next[1] - openn), priceset))
+                    x_instance.append(normalized1toMinus1((x_list_next[2] - openn), priceset))
+                    x_instance.append(normalized1toMinus1((x_list_next[3] - openn), priceset))
                     
                     # volume will be normalized anyway
                     x_instance.append(normalized1to0(x_list_next[4], volumeset))
@@ -180,7 +180,7 @@ def run_nn(x, y):
     model = Sequential()
     model.add(Dense(16, input_dim=(x.shape[1]) ))
     model.add(Dropout(0.2))
-    model.add(Dense(128, ))
+    model.add(Dense(128, activation='relu' ))
     model.add(Dense(128, ))
     model.add(Dropout(0.2))
     model.add(Dense(128, ))
@@ -226,10 +226,26 @@ def run_sklearn(x, y, new_model = True):
     y_predict = model.predict(x_test)
 #    print('MSE:  %.2f' % mean_squared_error(y_test, y_predict) )
     accuracy = accuracy_score(y_test, y_predict)
-    error_rate = 1 - accuracy
+#    error_rate = 1 - accuracy
     
-    print("Error rate: %.2f%%" % (error_rate*100))
-
+    print("Accuracy rate: %.2f%%" % (accuracy*100))
+    
+def verify_sklearn(x, y):
+    x_list = x.tolist()
+    y_list = y.tolist()
+    x_train, x_test, y_train, y_test = train_test_split(x_list, y_list, test_size=0.33)
+    
+    model = None
+       
+    print("Loading model from", save_sklearn_model)
+    with open(save_sklearn_model, 'rb') as f:
+        model=pickle.load(f)
+        
+    for i in range(10):
+        y_predict = model.predict(x_test[i])
+        accuracy = accuracy_score(y_test[i], y_predict)
+        print("Accuracy:", accuracy)
+        
 
 if __name__ == '__main__':
     if os.path.isfile(save_file_x + '.npy') and os.path.isfile(save_file_y + '.npy'):
@@ -248,8 +264,9 @@ if __name__ == '__main__':
     print('='*40)
     
 
-    run_nn(np_load_x, np_load_y)
-#    run_sklearn(np_load_x, np_load_y, True)
+#    run_nn(np_load_x, np_load_y)
+    run_sklearn(np_load_x, np_load_y, new_model = False)
+#    verify_sklearn(np_load_x, np_load_y)
     if np_load_x.shape[1] != num_candlestick * 4:
         print("Warning: num_candlestick mis-match. Config is %d but data file is %d" % (num_candlestick,(np_load_x.shape[1]/4)))
 
