@@ -226,10 +226,30 @@ def run_sklearn(x, y, new_model = True):
     y_predict = model.predict(x_test)
 #    print('MSE:  %.2f' % mean_squared_error(y_test, y_predict) )
     accuracy = accuracy_score(y_test, y_predict)
-    error_rate = 1 - accuracy
+#    error_rate = 1 - accuracy
     
-    print("Error rate: %.2f%%" % (error_rate*100))
-
+    print("Accuracy rate: %.2f%%" % (accuracy*100))
+    
+def verify_sklearn(x, y):
+    x_list = x.tolist()
+    y_list = y.tolist()
+    x_train, x_test, y_train, y_test = train_test_split(x_list, y_list, test_size=0.33)
+    
+    model = None
+       
+    print("Loading model from", save_sklearn_model)
+    with open(save_sklearn_model, 'rb') as f:
+        model=pickle.load(f)
+        
+    for i in range(50):
+        x_test_np = numpy.reshape(x_test[i],(1,60))
+        x_test_list = x_test_np.tolist()
+        y_test_np = numpy.reshape(y_test[i],(1,1))
+        y_test_list = y_test_np.tolist()
+        y_predict = model.predict(x_test_list)
+        accuracy = accuracy_score(y_test_list, y_predict)
+        print("Accuracy:", accuracy, "original", y_test_list, 'predict', y_predict)
+        
 
 if __name__ == '__main__':
     if os.path.isfile(save_file_x + '.npy') and os.path.isfile(save_file_y + '.npy'):
@@ -249,7 +269,8 @@ if __name__ == '__main__':
     
 
 #    run_nn(np_load_x, np_load_y)
-    run_sklearn(np_load_x, np_load_y, new_model = True)
+#    run_sklearn(np_load_x, np_load_y, new_model = False)
+    verify_sklearn(np_load_x, np_load_y)
     if np_load_x.shape[1] != num_candlestick * 4:
         print("Warning: num_candlestick mis-match. Config is %d but data file is %d" % (num_candlestick,(np_load_x.shape[1]/4)))
 
