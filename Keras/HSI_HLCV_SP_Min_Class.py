@@ -25,6 +25,7 @@ from matplotlib import pyplot as plt
 import sys
 import pickle
 import time
+from keras.callbacks import TensorBoard
 
 starttime = time.time()
 
@@ -41,7 +42,7 @@ save_sklearn_model = 'hlcv_sp_min_sklearn.pickle'
     
 # Neural Network Parameters:
 batch_size = 1024 
-epoch_number = 800
+epoch_number = 20
 
 def normalized1to0(value, list):
     return ((value - min(list)) / (max(list) - min(list)))
@@ -194,15 +195,18 @@ def run_nn(x, y):
     model.add(Dense(3, activation='softmax'))
     model.summary()
     
-    plot_losses = PlotLosses()  
+    plot_losses = PlotLosses() 
+#    tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
+    tensorboard = TensorBoard(log_dir="c:\\tlogs")
     
     model.compile(optimizer='SGD', loss='categorical_crossentropy', metrics=['accuracy'])
-    model.fit(x_train, y_train, epochs=epoch_number, validation_split=0.2, batch_size=batch_size, callbacks=[plot_losses], verbose=1)
+#    model.fit(x_train, y_train, epochs=epoch_number, validation_split=0.2, batch_size=batch_size, callbacks=[plot_losses], verbose=1)
+    model.fit(x_train, y_train, epochs=epoch_number, validation_split=0.2, batch_size=batch_size, callbacks=[tensorboard], verbose=1)
 
     score=model.evaluate(x_test, y_test, verbose=0)
     print('Test loss: %.3f' % score[0])
     print('Test accuracy: %.3f' % (score[1]*100))
-    plot_losses.plot();
+#    plot_losses.plot();
   
 def run_sklearn(x, y, new_model = True):
   
@@ -242,7 +246,7 @@ def verify_sklearn(x, y):
         model=pickle.load(f)
         
     for i in range(50):
-        x_test_np = numpy.reshape(x_test[i],(1,60))
+        x_test_np = numpy.reshape(x_test[i],(1,x.shape[1]))
         x_test_list = x_test_np.tolist()
         y_test_np = numpy.reshape(y_test[i],(1,1))
         y_test_list = y_test_np.tolist()
@@ -268,10 +272,9 @@ if __name__ == '__main__':
     print('np_data shape: x = %s y = %s' % (np_load_x.shape, np_load_y.shape))  
     print('='*40)
     
-
-#    run_nn(np_load_x, np_load_y)
+    run_nn(np_load_x, np_load_y)
 #    run_sklearn(np_load_x, np_load_y, new_model = False)
-    verify_sklearn(np_load_x, np_load_y)
+#    verify_sklearn(np_load_x, np_load_y)
     if np_load_x.shape[1] != num_candlestick * 4:
         print("Warning: num_candlestick mis-match. Config is %d but data file is %d" % (num_candlestick,(np_load_x.shape[1]/4)))
 
