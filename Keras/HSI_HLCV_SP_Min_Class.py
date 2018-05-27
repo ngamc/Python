@@ -249,6 +249,7 @@ def verify_sklearn(x, y):
         y_predict = model.predict(x_test_list)
         accuracy = accuracy_score(y_test_list, y_predict)
         print("Accuracy:", accuracy, "original", y_test_list, 'predict', y_predict)
+
         
 
 if __name__ == '__main__':
