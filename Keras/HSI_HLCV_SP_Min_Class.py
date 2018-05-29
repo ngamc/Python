@@ -272,8 +272,8 @@ if __name__ == '__main__':
     print('np_data shape: x = %s y = %s' % (np_load_x.shape, np_load_y.shape))  
     print('='*40)
     
-    run_nn(np_load_x, np_load_y)
-#    run_sklearn(np_load_x, np_load_y, new_model = False)
+#    run_nn(np_load_x, np_load_y)
+    run_sklearn(np_load_x, np_load_y, new_model = False)
 #    verify_sklearn(np_load_x, np_load_y)
     if np_load_x.shape[1] != num_candlestick * 4:
         print("Warning: num_candlestick mis-match. Config is %d but data file is %d" % (num_candlestick,(np_load_x.shape[1]/4)))
