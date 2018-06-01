@@ -12,9 +12,10 @@ from keras.layers import Dense
 from keras.utils import np_utils
 from plotlosses import PlotLosses
 from sklearn.model_selection import train_test_split
+import sys
 
 # configs
-epoch_number=1000;
+epoch_number=100;
 batch_size=10
 
 
@@ -26,6 +27,8 @@ y_raw = iris.target
 name = iris.target_names
 desc = iris.DESCR
 feature = iris.feature_names
+
+
 
 # one hot encoding of y
 y = np_utils.to_categorical(y_raw, 3)       # we have 3 class
@@ -40,7 +43,7 @@ model.summary()
 
 plot_losses = PlotLosses()
 
-model.compile(optimizer='SGD', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model.fit(x_train, y_train, epochs=epoch_number, validation_split=0.2, batch_size=batch_size, callbacks=[plot_losses], verbose=1)
 
 score=model.evaluate(x_test, y_test, verbose=0)
