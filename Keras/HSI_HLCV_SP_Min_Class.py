@@ -45,7 +45,7 @@ save_sklearn_model = 'hlcv_sp_min_sklearn.pickle'
     
 # Neural Network Parameters:
 batch_size = 1024 
-epoch_number = 5
+epoch_number = 100
 
 def normalized1to0(value, list):
     return ((value - min(list)) / (max(list) - min(list)))
