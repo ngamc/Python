@@ -42,13 +42,19 @@ def get_stat_on_day(year, month, day, filename, num):
             raw_data = raw_data.replace('\u3000','')
             
             result = []
-            for i in range(8):
-                item = json.loads(raw_data)[num]['content'][0]['table']['tr'][i]['td'][0][0]       
-                result.append(item)
-                
-#            print(result)
-            with codecs.open(filename, 'a', 'utf-8') as file:
-                file.write("%s-%s-%s %s %s %s %s %s %s %s %s\r\n"%(year, month, day, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7]))
+            if num == 0 or num == 2:
+                for i in range(8):
+                    item = json.loads(raw_data)[num]['content'][0]['table']['tr'][i]['td'][0][0]       
+                    result.append(item)
+
+                with codecs.open(filename, 'a', 'utf-8') as file:
+                    file.write("%s-%s-%s %s %s %s %s %s %s %s %s\r\n"%(year, month, day, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7]))
+            else:
+                for i in range(6):
+                    item = json.loads(raw_data)[num]['content'][0]['table']['tr'][i]['td'][0][0]       
+                    result.append(item)
+                with codecs.open(filename, 'a', 'utf-8') as file:
+                    file.write("%s-%s-%s %s %s %s %s %s %s\r\n"%(year, month, day, result[0], result[1], result[2], result[3], result[4], result[5]))
     
             print('%s-%s-%s saved'%(year, month, day))    
     except:
