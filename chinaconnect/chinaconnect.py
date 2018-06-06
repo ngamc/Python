@@ -13,7 +13,7 @@ import glob
 # skipDay=1, numDay=2 will give a result of 1 day trading which is the previous day before yesterday
 
 skipDay=0   # number of day skipped, 0 for nothing
-numDay=1
+numDay=10
 
 
     # Total number of day, including skipDay
@@ -34,7 +34,8 @@ def sorting(wdir):
         if skipDay<countid:
             if debug:
                 print(eachfile)
-            df=pd.read_csv(eachfile,delim_whitespace=True, header=None, encoding='utf_8', thousands=',')
+            df=pd.read_csv(eachfile,delim_whitespace=True, header=None, encoding='utf-8', thousands=',')
+            
            # print(df)
             df.columns=['dummy','id','name','buy','sell','volume']
             df[countid]=1           # add a new column
@@ -84,7 +85,7 @@ def sorting(wdir):
     printList=['id','name','buySum','sellSum','net','buyPert']
     for num in range (skipDay+1, numDay+1):
         printList.append(num)
-    print(main_df.ix[:,printList])
+    print(main_df.loc[:,printList])
   
 print('==== China ====')
 sorting(dirChina)
