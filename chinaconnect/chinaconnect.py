@@ -13,7 +13,7 @@ import glob
 # skipDay=1, numDay=2 will give a result of 1 day trading which is the previous day before yesterday
 
 skipDay=0   # number of day skipped, 0 for nothing
-numDay=10
+numDay=3
 
 
     # Total number of day, including skipDay
