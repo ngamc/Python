@@ -6,6 +6,8 @@ import time
 import requests
 import matplotlib.pyplot as plt
 import numpy as np
+from getyahoodata import GetYahooDataFromFile, CodeToNum, GetYahooData, StockCode
+import sys
 
 plot_graph = True
 cookiesB = dict(B='foovk4hcji2u4&b=3&s=7b')
@@ -44,39 +46,57 @@ def print_full(x):
     print(x)
     pd.reset_option('display.max_rows')
 
-def getYahooData(id):
-    print('Getting',id)
-#    url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb=ucSAmXZjrNg'
-    url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb='+crumb
-    #print(url)
-    #cookiesB = dict(B='foovk4hcji2u4&b=3&s=7b')
-
+#def getYahooData(id):
+#    print('Getting',id)
+##    url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb=ucSAmXZjrNg'
+#    url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb='+crumb
+#    #print(url)
+#    #cookiesB = dict(B='foovk4hcji2u4&b=3&s=7b')
+#    
+#    try:
+#        urlData=requests.get(url, cookies=cookiesB).content
+#        df=pd.read_csv(io.StringIO(urlData.decode('utf-8')))
+#        df.set_index('Date', inplace=True)
+#        df=df[['Adj Close']]
+#        df.replace('null',np.nan,inplace=True)
+#        df.replace('0.000000',np.nan, inplace=True)
+#        df.fillna(method='ffill',inplace=True)
+###        if id=='02800':
+###            print_full(df)
+#         
+###        df=df[~df['Adj Close'].isin(['null'])]          # remove null rows
+###        df=df[~df['Adj Close'].isin(['0.000000'])]
+#        df=df.astype(float)
+#          
+#        df['pctchange']=(df['Adj Close']-df['Adj Close'][0])/df['Adj Close'][0]*100.0
+#        df=df[['pctchange']]
+#        df.columns=[df_id_to_list.loc[int(str(id).lstrip('0'))]['Name']]
+##        print(df)
+#        return df
+#    except Exception as e:
+#        print(e)
+#        print ('Skipping',id)
+#        raise
+        
+def parsedf(df, id):
     try:
-        urlData=requests.get(url, cookies=cookiesB).content
-        df=pd.read_csv(io.StringIO(urlData.decode('utf-8')))
-#        print(df)
-
         df.set_index('Date', inplace=True)
         df=df[['Adj Close']]
+
         df.replace('null',np.nan,inplace=True)
         df.replace('0.000000',np.nan, inplace=True)
         df.fillna(method='ffill',inplace=True)
-##        if id=='02800':
-##            print_full(df)
-         
-##        df=df[~df['Adj Close'].isin(['null'])]          # remove null rows
-##        df=df[~df['Adj Close'].isin(['0.000000'])]
         df=df.astype(float)
-          
+         
         df['pctchange']=(df['Adj Close']-df['Adj Close'][0])/df['Adj Close'][0]*100.0
         df=df[['pctchange']]
         df.columns=[df_id_to_list.loc[int(str(id).lstrip('0'))]['Name']]
-        print(df)
         return df
     except Exception as e:
         print(e)
         print ('Skipping',id)
-        raise
+#        sys.exit()
+#        raise
 
 def get_sector_data(sector_id=0):
     stocks=list_stock[sector_id][1:]
@@ -88,13 +108,25 @@ def get_sector_data(sector_id=0):
             pass
         else:
             try:
-                df = getYahooData(eachstock)
+#                df = getYahooData(eachstock)       # calling local getYahooData function; depreciated
+#                df = GetYahooData(StockCode(eachstock))     # Calling external getyahoodata function
+                df = GetYahooDataFromFile(CodeToNum(eachstock))    # calling getyahoodata from file
+                if not isinstance(df, pd.DataFrame):
+                    raise Exception('Unexpected data size')
+                df = parsedf(df, eachstock)
+                if not isinstance(df, pd.DataFrame):
+                    raise Exception('Unexpected data size')
+#                print(df)
+#                sys.exit()
                 if main_df.empty:
                     main_df=df
                 else:
                     main_df=main_df.join(df)
+#                print(df)
             except Exception as e:
-                print('Error: passing', eachstock)
+                print('Error: passing', eachstock, e)
+#                print(df)
+#                sys.exit()
                 pass
 
     main_df.replace('null',np.nan,inplace=True)
