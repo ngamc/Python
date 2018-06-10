@@ -8,14 +8,16 @@ Created on Fri Jun  8 15:31:20 2018
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter, MonthLocator
 
-southbound_1='D:\\user\\Documents\\Python\\hkconnect\\stat\\shanghai_southbound.txt'
-southbound_2='D:\\user\\Documents\\Python\\hkconnect\\stat\\shenzhen_southbound.txt'
-northbound_1='D:\\user\\Documents\\Python\\chinaconnect\\stat\\shanghai_northbound.txt'
-northbound_2='D:\\user\\Documents\\Python\\chinaconnect\\stat\\shenzhen_northbound.txt'
+path='C:\\Users\\Nelson\\Documents\\Python\\'
+southbound_1 = path + 'hkconnect\\stat\\shanghai_southbound.txt'
+southbound_2 = path + 'hkconnect\\stat\\shenzhen_southbound.txt'
+northbound_1 = path + 'chinaconnect\\stat\\shanghai_northbound.txt'
+northbound_2 = path + 'chinaconnect\\stat\\shenzhen_northbound.txt'
 
 
-def wowo(file1, file2):
+def cashflow(file1, file2, title=''):
     df1 = pd.read_csv(file1, sep=' ', header=None )
     df1 = df1.iloc[:,0:4]
     df1.columns = ['Date', 'bas1', 'buy1', 'sell1']
@@ -61,15 +63,22 @@ def wowo(file1, file2):
     
     dfall = dfall.drop(['bas1', 'bas2', 'buy1', 'buy2', 'sell1', 'sell2', 'net', 'buy', 'sell'], 1)
 #    print(dfall)
-
-             
-    plt.plot(dfall.index, dfall['rolling'])
+    size = len(dfall)
+    fig, ax = plt.subplots()         
+    ax.plot_date(pd.to_datetime(dfall.index), dfall['rolling'], 'b-')
+    plt.xlabel('Date', fontsize=12)
+#    plt.plot(dfall.index, dfall['rolling'])
+#    plt.xticks(range(1, size, 2))
+    months = MonthLocator()
+    monthsFmt = DateFormatter("%b '%y")
+    ax.xaxis.set_major_locator(months)
+    ax.xaxis.set_major_formatter(monthsFmt)
 #    ax1.set_xscale(dfall.index)
-    plt.title('Compare HK Sectors')
+    plt.title(title)
     plt.show()
 
 
 
 if __name__ == '__main__':
-    wowo(southbound_1, southbound_2)
-    wowo(northbound_1, northbound_2)
+    cashflow(southbound_1, southbound_2, 'South Bound')
+    cashflow(northbound_1, northbound_2, 'North Bound')

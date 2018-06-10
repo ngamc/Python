@@ -4,10 +4,11 @@ Created on Wed Apr  4 14:23:26 2018
 
 @author: user
 """
-
-import read_sp
+import sys
+sys.path.append('../')
+from  HKStock.read_sp import Read_SP_Min_File_No_LastNight 
 import backtrader as bt
-from getyahoodata import SPPandasData
+from HKStock.getyahoodata import SPPandasData
 import pandas as pd
 import collections
 import matplotlib
@@ -68,8 +69,8 @@ def runstrat(df, smaperiod=10):
 
 
 if __name__ =="__main__":
-    df=read_sp.Read_SP_Min_File_No_LastNight()
-#    print(df)
+    df=Read_SP_Min_File_No_LastNight('2018', '6', '8')
+    print(df)
     for i in range(3,50):
         value=runstrat(df, i)
         print("Final Value: ", i, ": ", value)

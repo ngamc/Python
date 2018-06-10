@@ -27,8 +27,8 @@ def sqn(equity, num=default_num, list_table=False, graph=True):
     df=pd.DataFrame()
     df_result=pd.DataFrame(columns=['Date', 'sqn', 'Close'])
     
-#    df=GetYahooData(equity, startdate )            # download from yahoo directly
-    df=GetYahooDataFromFile(equity, startdate )             # read local files
+    df=GetYahooData(equity, startdate )            # download from yahoo directly
+#    df=GetYahooDataFromFile(equity, startdate )             # read local files
     if not isinstance(df, pd.DataFrame):
         return None
     df = df[pd.notnull(df['Close'])]
@@ -86,7 +86,7 @@ def sqn(equity, num=default_num, list_table=False, graph=True):
     return ("%.2f" % last_sqn)
     
 if __name__=='__main__':
-    equity = "0001.HK"
+    equity = "0005.HK"
     print(sqn(equity, 100, True))
     
     
