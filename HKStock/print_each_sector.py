@@ -102,11 +102,12 @@ def print_sector(sector_id=0):
          ax1 = plt.subplot2grid((1,1), (0,0))
          main_df.iloc[:,:-1].plot(ax=ax1)
          main_df.iloc[:,-1:].plot(color='k',ax=ax1, linewidth=3)
+         ax1.legend(loc='upper left', bbox_to_anchor=(-0.1, -0.1), fancybox=True, shadow=True, ncol=main_df.shape[1])
          plt.title(list_stock[sector_id][0])
          plt.show()
     
 
-for i in range(22):
+for i in range(30):
     print('Starting sector',i)
     print_sector(i)
     

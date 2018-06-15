@@ -31,15 +31,15 @@ timestamp_end = time.time()
 ##print(stocklist)
 
 df_id_to_list=pd.DataFrame.from_csv('D:\\allstocklist.csv')
-print(df_id_to_list)
+#print(df_id_to_list)
 ##df_id_to_list.set_index('ID')
 
 with open('D:\\stocklist.ini', 'r') as f:
   reader = csv.reader(f)
   list_stock = list(reader)
 
-##for i in range(len(list_stock)):
-##    print (list_stock[i][0], 'has', list_stock[i][1:])
+for i in range(len(list_stock)):
+    print (list_stock[i][0], 'has', list_stock[i][1:])
 
 def print_full(x):
     pd.set_option('display.max_rows', len(x))
@@ -142,76 +142,80 @@ def get_sector_data(sector_id=0):
 ##    time.sleep(15)
     return df_mean, df_std, rowcount        
 
+if __name__ == '__main__':
     
-df_all_mean=pd.DataFrame()
-df_all_std=pd.DataFrame()
-all_row=[]
-
-for i in range(0,29):    # max 28
-    if i>(len(list_stock)-1):
-        print('Error: We do not have sector （%d）. Skipping'%(i))
-    else:
-        print('===== Starting sector',i,' (' , list_stock[i][0],') =====')
-    ##    time.sleep(1)
-        df_mean, df_std, rowcount = get_sector_data(i)
-    ##    print(df_mean.head())
-    ##    time.sleep(3)
-        df_mean.columns=[list_stock[i][0]]
-        df_std.columns=[list_stock[i][0]]
-        all_row.append(rowcount)
-        if df_all_mean.empty:
-            df_all_mean=df_mean
-            df_all_std=df_std
+    
+    df_all_mean=pd.DataFrame()
+    df_all_std=pd.DataFrame()
+#    all_row=[]
+    
+    for i in range(len(list_stock)):    # max 28
+        if i>(len(list_stock)-1):
+            print('Error: We do not have sector （%d）. Skipping'%(i))
         else:
-            df_all_mean=df_all_mean.join(df_mean)
-            df_all_std=df_all_std.join(df_std)
-##    print(df_all_mean)
-
-print(df_all_mean)
-print ("----------")
-df_all_mean_sorted=df_all_mean.sort_values(df_all_mean.last_valid_index(), axis=1)
-print(df_all_mean_sorted)
-for name in reversed(df_all_mean_sorted.columns.values):
-    print(name)
-
-
-if plot_graph == True:
-    if df_all_mean.shape[1] < 11:       # if total 10 or less
-        print("   === First choice ===")
-        ax1 = plt.subplot2grid((1,1), (0,0))
-        df_all_mean.plot(ax=ax1)
-        plt.title('Compare HK Sectors')
-        plt.show()
+            print('===== Starting sector',i,' (' , list_stock[i][0],') =====')
+        ##    time.sleep(1)
+            df_mean, df_std, rowcount = get_sector_data(i)
+        ##    print(df_mean.head())
+        ##    time.sleep(3)
+            df_mean.columns=[list_stock[i][0]]
+            df_std.columns=[list_stock[i][0]]
+#            all_row.append(rowcount)
+            if df_all_mean.empty:
+                df_all_mean=df_mean
+                df_all_std=df_std
+            else:
+                df_all_mean=df_all_mean.join(df_mean)
+                df_all_std=df_all_std.join(df_std)
+    ##    print(df_all_mean)
     
-        ax2 = plt.subplot2grid((1,1), (0,0))
-        df_all_std.plot(ax=ax2)
-        plt.title('Compare HK Sectors (deviation)')
-        plt.show()
-    elif df_all_mean.shape[1] <21:     # if total 20 or less
-        print("   === Second choice ===")
+    #print(df_all_mean)
+    print ("----------")
+    df_all_mean_sorted = df_all_mean.sort_values(df_all_mean.last_valid_index(), axis=1, ascending=False)
+    #print(df_all_mean_sorted)
+    for name in df_all_mean_sorted.columns.values:
+        print(name)
+    
+    
+    if plot_graph == True:
+    #    if df_all_mean.shape[1] < 11:       # if total 10 or less
+    #        print("   === First choice ===")
+    #        ax1 = plt.subplot2grid((1,1), (0,0))
+    #        df_all_mean.plot(ax=ax1)
+    #        plt.title('Compare HK Sectors')
+    #        plt.show()
+    #    
+    #        ax2 = plt.subplot2grid((1,1), (0,0))
+    #        df_all_std.plot(ax=ax2)
+    #        plt.title('Compare HK Sectors (deviation)')
+    #        plt.show()
+    #    elif df_all_mean.shape[1] <21:     # if total 20 or less
+    #        print("   === Second choice ===")
+    #        ax1 = plt.subplot2grid((1,1), (0,0))             
+    #        df_all_mean.iloc[:,0:10].plot(ax=ax1)
+    #        df_all_mean.iloc[:,10:].plot(ax=ax1, ls=':')
+    #        plt.title('Compare HK Sectors')
+    #        plt.show()
+    #        
+    #        ax2 = plt.subplot2grid((1,1), (0,0))
+    #        df_all_std.iloc[:,0:10].plot(ax=ax2)
+    #        df_all_std.iloc[:,10:].plot(ax=ax2, ls=':')
+    #        plt.title('Compare HK Sectors (deviation)')
+    #        plt.show()
+    #    else:
+    #        print("   === Third choice ===")
         ax1 = plt.subplot2grid((1,1), (0,0))             
-        df_all_mean.iloc[:,0:10].plot(ax=ax1)
-        df_all_mean.iloc[:,10:].plot(ax=ax1, ls=':')
+        df_all_mean_sorted.iloc[:,0:10].plot(ax=ax1, figsize=(15, 10))
+    #        df_all_mean.iloc[:,10:20].plot(ax=ax1, ls='--')
+    #        df_all_mean.iloc[:,20:].plot(ax=ax1, ls=':')
         plt.title('Compare HK Sectors')
-        plt.show()
-        
-        ax2 = plt.subplot2grid((1,1), (0,0))
-        df_all_std.iloc[:,0:10].plot(ax=ax2)
-        df_all_std.iloc[:,10:].plot(ax=ax2, ls=':')
-        plt.title('Compare HK Sectors (deviation)')
-        plt.show()
-    else:
-        print("   === Third choice ===")
-        ax1 = plt.subplot2grid((1,1), (0,0))             
-        df_all_mean.iloc[:,0:10].plot(ax=ax1)
-        df_all_mean.iloc[:,10:20].plot(ax=ax1, ls='--')
-        df_all_mean.iloc[:,20:].plot(ax=ax1, ls=':')
-        plt.title('Compare HK Sectors')
+        ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=10)
         plt.show()
          
-        ax2 = plt.subplot2grid((1,1), (0,0))
-        df_all_std.iloc[:,0:10].plot(ax=ax2)
-        df_all_std.iloc[:,10:20].plot(ax=ax2, ls='--')
-        df_all_std.iloc[:,20:].plot(ax=ax2, ls=':')
-        plt.title('Compare HK Sectors (deviation)')
-        plt.show()
+    #    ax2 = plt.subplot2grid((1,1), (0,0))
+    #    df_all_std.iloc[:,0:10].plot(ax=ax2, figsize=(15, 10))
+    ##        df_all_std.iloc[:,10:20].plot(ax=ax2, ls='--')
+    ##        df_all_std.iloc[:,20:].plot(ax=ax2, ls=':')
+    #    plt.title('Compare HK Sectors (deviation)')
+    #    ax2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=10)
+    #    plt.show()

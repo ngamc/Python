@@ -10,7 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, MonthLocator
 
-path='C:\\Users\\Nelson\\Documents\\Python\\'
+path="D:\\user\\Documents\\Python\\"
+#path='C:\\Users\\Nelson\\Documents\\Python\\'
 southbound_1 = path + 'hkconnect\\stat\\shanghai_southbound.txt'
 southbound_2 = path + 'hkconnect\\stat\\shenzhen_southbound.txt'
 northbound_1 = path + 'chinaconnect\\stat\\shanghai_northbound.txt'

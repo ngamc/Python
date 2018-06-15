@@ -20,11 +20,11 @@ yesterday = end - datetime.timedelta(1)
 def remove_empty_lines(stock):
     filename = savepath + str(stock) +".csv"
     if os.path.isfile(filename):    
-        with open(filename) as infile, open('tmpfile.csv', 'w') as outfile:
+        with open(filename) as infile, open('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', 'w') as outfile:
             for line in infile:
                 if not line.strip(): continue  # skip the empty line
                 outfile.write(line)  # non-empty line. Write it to output
-        os.replace('tmpfile.csv', filename)
+        os.replace('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', filename)
         
 def load_one_stock(stock): 
     filename = savepath + str(stock) +".csv"
@@ -72,14 +72,14 @@ if __name__ == "__main__":
     df_allstock=pd.DataFrame.from_csv(allstockfilename)
     
     count = 0
-#    for stock in df_allstock.index:
-#
+    for stock in df_allstock.index:
+
 #        if count == 100:
 #            break
-#        print(stock)
+        print(stock)
 #        count += 1
-#        load_one_stock(stock)
-#        remove_empty_lines(stock)
+        load_one_stock(stock)
+        remove_empty_lines(stock)
     
-    load_one_stock(8350)
-    remove_empty_lines(8350)
+#    load_one_stock(8350)
+#    remove_empty_lines(8350)

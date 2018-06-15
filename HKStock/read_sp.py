@@ -14,7 +14,7 @@ import sys
 
 
 product="HSI"
-path = 'C:\\' + product 
+path = 'P:\\' + product 
 thisyear=datetime.datetime.today().year
 thismonth=datetime.datetime.today().month
 thisday=datetime.datetime.today().day
@@ -57,9 +57,12 @@ def File_Path_Ticker(year="", month="", day=""):
         
     return path + "\\" + y  +"\\" + m + "\\" + y + "-" + m + "-" + d + "-tkr.txt"
 
-def Read_SP_Min_File(filepath=None):
-    if filepath is None:
+def Read_SP_Min_File(y='', m='', d=''):
+    if y == "":
         filepath=File_Path_Min(year=thisyear, month=thismonth, day=thisday)
+    else:
+        filepath=File_Path_Min(year=y, month=m, day=d)
+        
     df_file=pd.read_csv(filepath, sep=";", header=None)   # read ID to Name list
     df_file[0]=pd.to_datetime(df_file[0], format="%Y/%m/%d/%H/%M/%S")
     df_file.columns=['DateTime','Open','High','Low','Close', 'Volume']
