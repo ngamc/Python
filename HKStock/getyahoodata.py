@@ -41,6 +41,7 @@ def StockCode(id):
         sid = sid[-4:]
     return sid.zfill(4)+".HK" 
 
+# input stock code and return a number e.g. input 0027.HK and return 27
 def CodeToNum(code):
     return (str(code).lstrip('0').rstrip('.HK'))
     
