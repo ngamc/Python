@@ -8,7 +8,6 @@ This will give you a whole picture of each day, so as to compare each day's char
 
 import pandas as pd
 from read_sp import Read_SP_Ticker_Period, Read_SP_Min_File
-from stockstats import StockDataFrame as Sdf
 import matplotlib.pyplot as plt
 from datetime import date
 import datetime
@@ -194,7 +193,9 @@ def collect_stat(flist):
     
 def num_of_wave(y, m, d):
     df = Read_SP_Min_File(y,m.lstrip('0'),d.lstrip('0'))
+
     s_df = Sdf.retype(df)
+    print(df)
     df['sma'] = s_df['close_30_sma']    
 
     df.dropna(inplace=True)

@@ -19,18 +19,15 @@ from Others.email import sendm
 # numDay is number of days you want to process including skipDay
 # skipDay=1, numDay=2 will give a result of 1 day trading which is the previous day before yesterday
 
-skipDay=0   # number of day skipped, 0 for nothing
-numDay=3
-
-
-    # Total number of day, including skipDay
+skipDay=0  # number of day skipped, 0 for nothing
+numDay=3     # Total number of day, including skipDay
 dirChina='D:\\user\\Documents\\Python\\chinaconnect\\*.txt'
 dirHK='D:\\user\\Documents\\Python\\hkconnect\\*.txt'
 focus_list_hk = [5, 27, 66, 388, 700, 772, 799, 1211, 1299, 2318, 2628, 6030]
 focus_list_china = [333, 651, 2008, 2230, 2236, 2241, 2415, 2673, 300033, 600036, 600660, 600837, 600887, 601318]
 
 sendemail = False
-debug = False
+debug = True
 
 def add_focus_hk(row):
     for id in focus_list_hk:
@@ -54,24 +51,33 @@ def sorting(wdir, f=None):
         print('Total number of files: ', len(filenames))
     
     main_df=pd.DataFrame()
-    countid=1
-    for eachfile in reversed(filenames[-numDay:]):
+    countid = 1
+    done = 0
+    for eachfile in reversed(filenames[-numDay*3:]):
         if skipDay<countid:
+            df=pd.read_csv(eachfile,delim_whitespace=True, header=None, encoding='utf-8', thousands=',')
+            if (df[1].iloc[0] == '-'):
+                continue
             if debug:
                 print(eachfile)
-            df=pd.read_csv(eachfile,delim_whitespace=True, header=None, encoding='utf-8', thousands=',')
+            
             
 #            print(df)
             df.columns=['dummy','id','name','buy','sell','volume']
             df[countid]=1           # add a new column
 
 
-            #print(df)
+#            print(df)
             if main_df.empty:
                 main_df=df
             else:
                 main_df=main_df.append(df)
+            done+=1
+            if done == numDay - skipDay:
+                break
         countid=countid+1
+#    print(main_df)
+#    sys.exit()
 
     if wdir == dirHK:
         main_df['focus'] = main_df.apply(add_focus_hk, axis=1)
@@ -83,6 +89,7 @@ def sorting(wdir, f=None):
 #    print(main_df)
     main_df.reset_index(drop=True, inplace=True)
 #    main_df.columns=['id','name','buy','sell','volume','countid']
+#    main_df = main_df[main_df.buy!='-']
 #    print(main_df)
     
     # create buySum, sellSum, volSum
@@ -132,6 +139,8 @@ def sorting(wdir, f=None):
        
     
 if __name__ == '__main__':
+    f = None
+    
     if sendemail:
         f = StringIO()
         

@@ -7,7 +7,8 @@ Read line is equity value
 
 @author: user
 """
-
+import sys
+sys.path.append('..\HKStock')
 import math
 import pandas as pd
 from datetime import date
@@ -30,7 +31,7 @@ def Stock_Hsi_Diff_Sqn(equity, startdate, enddate=end, period=p):
 #    print("\r\n\r\n     ====  Loading stock", equity, " ====\r\n")
 #    df1=GetYahooData(equity, startdate, ed=date(2018,3,15) )
     df1=GetYahooData(equity, startdate, enddate )
-    print(df1)
+#    print(df1)
 #    print("\r\n\r\n     ====  Loading index", index, " ====\r\n")
 #    df2=GetYahooData(index, startdate, ed=date(2018,3,15))
     df2=GetYahooData(index, startdate, enddate)
@@ -74,8 +75,8 @@ def Stock_Hsi_Diff_Sqn(equity, startdate, enddate=end, period=p):
         df_result=df_result.append({'Date':df3.index[x+period], 'sqn': sqn, 'Close':df3['Close1'][x+period] }, 
                                     ignore_index=True)
         
-#    df_result=df_result.set_index('Date')
-#    print(df_result)
+    df_result=df_result.set_index('Date')
+    df_result.index = pd.to_datetime(df_result.index)
     
     print("Equity ", equity)
     fig = plt.figure()
@@ -84,17 +85,18 @@ def Stock_Hsi_Diff_Sqn(equity, startdate, enddate=end, period=p):
     ax1.plot(df_result['sqn'], 'silver', label = 'sqn (Equity - Index)')
     ax1.axhline(linewidth=1, color='k')
     ax1.set_ylabel('y1', color='silver')
-    for t1 in ax1.get_yticklabels():
-        t1.set_color('k')
+#    for t1 in ax1.get_yticklabels():
+#        t1.set_color('k')
     
     ax2 = ax1.twinx()
     ax2.plot(df_result['Close'], 'r-', label = equity)
     ax2.set_ylabel('y2', color='r')
-    for tl in ax2.get_yticklabels():
-        tl.set_color('r')
-    ax1.legend(loc='upper center', bbox_to_anchor=(0.35, -0.05))
+#    for tl in ax2.get_yticklabels():
+#        tl.set_color('r')
+    ax1.legend(loc='upper center', bbox_to_anchor=(0.35, -0.2))
           
-    ax2.legend(loc='upper center', bbox_to_anchor=(0.7, -0.05))
+    ax2.legend(loc='upper center', bbox_to_anchor=(0.7, -0.2))
+    fig.autofmt_xdate()
     
     plt.show()
 #    df_result.plot()

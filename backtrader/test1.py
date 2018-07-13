@@ -172,7 +172,7 @@ def printSQN(analyzer):
 if __name__=='__main__':
     #
     # Define equity and start date of equity data
-    equity="0700.HK"
+    equity="0005.HK"
     startdate=date(2018,1,1)
          
     

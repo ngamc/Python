@@ -281,7 +281,7 @@ def Remove_Last_Night(df, year="", month="", day="" ):
 if __name__ == "__main__":
 #    df=Read_SP_Min_File()
 #    df=Read_SP_Ticker('2018','6','8')
-    df = Read_SP_Ticker_Period('15m','2018','6','8', index='unixtime')
+    df = Read_SP_Ticker_Period('1m','2018','6','25', index='num')
 #    df = Read_SP_Min_File_No_LastNight('2018','6','8')
     print(df)
     

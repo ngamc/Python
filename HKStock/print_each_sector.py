@@ -29,7 +29,7 @@ timestamp_end = time.time()
 ##print(stocklist)
 
 df_id_to_list=pd.DataFrame.from_csv('D:\\allstocklist.csv') # read ID to Name list
-print(df_id_to_list)
+#print(df_id_to_list)
 ##df_id_to_list.set_index('ID')
 
 
@@ -46,7 +46,7 @@ def print_full(x):
     pd.reset_option('display.max_rows')
 
 def getYahooData(id):
-    print('Getting',id)
+#    print('Getting',id)
 #    url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb=ucSAmXZjrNg'
     #url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb=m0XyDT8bLnH'
     url = 'https://query1.finance.yahoo.com/v7/finance/download/'+str(id[1:])+'.HK?period1='+str(timestamp_start)+'&period2='+str(timestamp_end).split('.')[0]+'&interval=1d&events=history&crumb=SgSOFMkgfgO'
@@ -100,9 +100,10 @@ def print_sector(sector_id=0):
                
     if plot_graph == True:
          ax1 = plt.subplot2grid((1,1), (0,0))
+         main_df.index=pd.to_datetime(main_df.index)
          main_df.iloc[:,:-1].plot(ax=ax1)
          main_df.iloc[:,-1:].plot(color='k',ax=ax1, linewidth=3)
-         ax1.legend(loc='upper left', bbox_to_anchor=(-0.1, -0.1), fancybox=True, shadow=True, ncol=main_df.shape[1])
+         ax1.legend(loc='upper left', bbox_to_anchor=(-0.1, -0.2), fancybox=True, shadow=True, ncol=main_df.shape[1])
          plt.title(list_stock[sector_id][0])
          plt.show()
     
