@@ -11,7 +11,7 @@ import tushare as ts
 import matplotlib.pyplot as plt
 import mpl_finance as mpf
  
-data = ts.get_k_data('399300', index=True, start='2017-01-01', end='2017-06-31')
+data = ts.get_k_data('399300', index=True, start='2017-01-01', end='2018-06-31')
 sma_10 = talib.SMA(np.array(data['close']), 10)
 sma_30 = talib.SMA(np.array(data['close']), 30)
 print(sma_10)
