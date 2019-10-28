@@ -90,6 +90,7 @@ def GetYahooData(id, sd=start, ed=end):
 #        print(df)
         df[['Open','High','Low','Close','Adj Close','Volume']] = df[['Open','High','Low','Close','Adj Close','Volume']].apply(pd.to_numeric)  # Convert string to numeric
         df = df.reset_index(drop=True)
+#        print(df)
         return df
     except Exception as e:
 #        print(e)
@@ -106,7 +107,9 @@ def GetYahooDataFromFile(id, sd=start, ed=end):
         try:
             
             df = pd.read_csv(filename, sep=',') 
+            print(df)
             df['Date'] = pd.to_datetime(df['Date'])
+            print(df)
             df = df[(df['Date'].dt.date >= sd) & (df['Date'].dt.date <= ed)]
             return df
 
@@ -279,5 +282,5 @@ class SPPandasData(btfeeds.PandasData):
 if __name__=='__main__':
 #    print("\r\n\r\n     ==== Testing with stock 00700 ====\r\n")
     df=pd.DataFrame()
-    df=GetYahooData('0001.HK', date(2018,6,1), date(2018,6,4))
+    df=GetYahooDataFromFile('0001.HK', date(2018,6,1), date(2018,6,4))
     print(df)
