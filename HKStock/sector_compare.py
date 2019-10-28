@@ -13,7 +13,7 @@ plot_graph = True
 cookiesB = dict(B='foovk4hcji2u4&b=3&s=7b')
 crumb="SgSOFMkgfgO"
 
-start=date(2018,3,1)
+start=date(2019,1,1)
 DAY = 24*60*60                      # POSIX day in seconds (exact value)
 timestamp_start = (start - date(1970, 1, 1)).days * DAY
 timestamp_end = time.time()
@@ -34,7 +34,7 @@ df_id_to_list=pd.DataFrame.from_csv('D:\\allstocklist.csv')
 #print(df_id_to_list)
 ##df_id_to_list.set_index('ID')
 
-with open('D:\\stocklist.ini', 'r') as f:
+with open('..\\configs\\stocklist.ini', 'r') as f:
   reader = csv.reader(f)
   list_stock = list(reader)
 
@@ -167,7 +167,7 @@ if __name__ == '__main__':
             else:
                 df_all_mean=df_all_mean.join(df_mean)
                 df_all_std=df_all_std.join(df_std)
-    ##    print(df_all_mean)
+#        print(df_all_mean)
     
     #print(df_all_mean)
     print ("----------")

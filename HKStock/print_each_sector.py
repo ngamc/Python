@@ -9,7 +9,7 @@ import numpy as np
 
 plot_graph = True
 
-start=date(2018,3,20)
+start=date(2018,7,20)
 DAY = 24*60*60                      # POSIX day in seconds (exact value)
 timestamp_start = (start - date(1970, 1, 1)).days * DAY
 timestamp_end = time.time()
