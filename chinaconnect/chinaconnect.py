@@ -12,7 +12,7 @@ from io import StringIO
 import sys
 #sys.path.insert(0, '/path/to/application/app/folder')
 sys.path.append('D:\\user\\Documents\\Python\\')
-from Others.email import sendm
+from trial.email import sendm
 
 # skipDay and numDay
 # skipDay is number of days you want to skip. e.g. 1 if you only want to skip one day
@@ -20,7 +20,7 @@ from Others.email import sendm
 # skipDay=1, numDay=2 will give a result of 1 day trading which is the previous day before yesterday
 
 skipDay=0  # number of day skipped, 0 for nothing
-numDay=3     # Total number of day, including skipDay
+numDay=100         # Total number of day, including skipDay
 dirChina='D:\\user\\Documents\\Python\\chinaconnect\\*.txt'
 dirHK='D:\\user\\Documents\\Python\\hkconnect\\*.txt'
 focus_list_hk = [5, 27, 66, 388, 700, 772, 799, 1211, 1299, 2318, 2628, 6030]

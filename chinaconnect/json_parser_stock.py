@@ -26,11 +26,14 @@ def get_list(num, raw_data):
     str_data = ''
     for i in range(10):
         x = json.loads(raw_data)[num]['content'][1]['table']['tr'][i]['td'][0]
+        if x[2] =="":
+            x[2] = "-"
         str_data = str_data + "%s %s %s %s %s %s \r\n" % (x[0], x[1], x[2], x[3], x[4], x[5])
     return str_data
 
 def do_work_on_day(year, month, day):
     urllink="http://www.hkex.com.hk/chi/csm/DailyStat/data_tab_daily_%s%s%sc.js"%(year, month, day)
+    print(urllink)
     try:
         with urllib.request.urlopen(urllink) as url:
             
