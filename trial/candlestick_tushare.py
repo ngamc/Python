@@ -11,10 +11,10 @@ import tushare as ts
 import matplotlib.pyplot as plt
 import mpl_finance as mpf
  
-data = ts.get_k_data('399300', index=True, start='2017-01-01', end='2018-06-31')
+#data = ts.get_k_data('399300', index=True, start='2017-01-01', end='2018-07-31')
+data = ts.get_k_data('601318', index=False, start='2017-01-01', end='2018-07-31')
 sma_10 = talib.SMA(np.array(data['close']), 10)
 sma_30 = talib.SMA(np.array(data['close']), 30)
-print(sma_10)
 fig = plt.figure(figsize=(17, 10))
 ax = fig.add_axes([0,0.2,1,0.5])
 ax2 = fig.add_axes([0,0,1,0.2])
