@@ -19,12 +19,16 @@ yesterday = end - datetime.timedelta(1)
 # sometimes there are empty lines in the file. This is to remove it
 def remove_empty_lines(stock):
     filename = savepath + str(stock) +".csv"
-    if os.path.isfile(filename):    
-        with open(filename) as infile, open('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', 'w') as outfile:
-            for line in infile:
-                if not line.strip(): continue  # skip the empty line
-                outfile.write(line)  # non-empty line. Write it to output
-        os.replace('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', filename)
+    try:
+        if os.path.isfile(filename):    
+            with open(filename) as infile, open('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', 'w') as outfile:
+                for line in infile:
+                    if not line.strip(): continue  # skip the empty line
+                    outfile.write(line)  # non-empty line. Write it to output
+            os.replace('D:\\user\\Documents\\Python\\Ignore\\tmpfile.csv', filename)
+    except Exception as e:
+        print (stock, "Replace file error.", e)
+        pass
         
 def load_one_stock(stock): 
     filename = savepath + str(stock) +".csv"
@@ -42,6 +46,7 @@ def load_one_stock(stock):
             else:
                 
                 start_t = (record_date + datetime.timedelta(days=1)).date()
+                print(start_t, yesterday)
                 df_new = GetYahooData(StockCode(stock), sd=start_t, ed=yesterday)
                 df_new['DateTime'] = pd.to_datetime(df_new['Date'])
                 df_new = df_new[(df_new['DateTime'].dt.date >= start_t) & (df_new['DateTime'].dt.date < end) ]
@@ -60,26 +65,28 @@ def load_one_stock(stock):
                 else:
                     print(stock, "file exists. df no update")
         except Exception as e:
-            print (stock, "file exists. Error catched", e)
+            print (stock, "file exists. Error catched. Maybe getyahoodata return zero?", e)
             pass
     else:
         print(stock, "file not exist. Getting from Yahoo")
         df = GetYahooData(StockCode(stock), sd=start, ed=yesterday)
         if isinstance(df, pd.DataFrame):
+            
+            
             df.to_csv(filename, sep=',', index=False)
 
 if __name__ == "__main__":
     df_allstock=pd.DataFrame.from_csv(allstockfilename)
-    
+
     count = 0
     for stock in df_allstock.index:
-
-#        if count == 100:
+#
+#        if count == 10:
 #            break
         print(stock)
 #        count += 1
         load_one_stock(stock)
         remove_empty_lines(stock)
     
-#    load_one_stock(8350)
+#    load_one_stock(1876)
 #    remove_empty_lines(8350)

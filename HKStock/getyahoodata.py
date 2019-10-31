@@ -22,7 +22,7 @@ plot_graph = True
 cookiesB = dict(B='foovk4hcji2u4&b=3&s=7b')
 crumb="SgSOFMkgfgO"
 yahoofilepath = 'D:\\user\\Documents\\Python\\Ignore\\yahoo\\'
-
+allstockfilename = 'D:\\allstocklist.csv'
 
 start=date(2018,3,1)
 DAY = 24*60*60                      # POSIX day in seconds (exact value)
@@ -31,6 +31,12 @@ end=datetime.date.today()
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+df_allstock=pd.DataFrame.from_csv(allstockfilename)
+# Input stock ID and return stock name e.g. 27 return GALAXY ENT
+def IdToName(id):
+    return  df_allstock.loc[int(str(id).lstrip('0')),"Name"]
+#    print(df_allstock[])
+    
 # imput a number e.g. 27 and output 0027.HK
 def StockCode(id):
     if isinstance(id, int):
@@ -102,14 +108,14 @@ def GetYahooDataFromFile(id, sd=start, ed=end):
     if id[-2:] == 'HK':
         id = CodeToNum(id)
     filename = yahoofilepath + str(id) +".csv"
-    print(filename)
+#    print(filename)
     if os.path.isfile(filename):        
         try:
             
             df = pd.read_csv(filename, sep=',') 
-            print(df)
+#            print(df)
             df['Date'] = pd.to_datetime(df['Date'])
-            print(df)
+#            print(df)
             df = df[(df['Date'].dt.date >= sd) & (df['Date'].dt.date <= ed)]
             return df
 
@@ -282,5 +288,5 @@ class SPPandasData(btfeeds.PandasData):
 if __name__=='__main__':
 #    print("\r\n\r\n     ==== Testing with stock 00700 ====\r\n")
     df=pd.DataFrame()
-    df=GetYahooDataFromFile('0001.HK', date(2018,6,1), date(2018,6,4))
+    df=GetYahooData('0788.HK', date(2019,10,26), date(2019,10,28))
     print(df)

@@ -19,8 +19,8 @@ from trial.email import sendm
 # numDay is number of days you want to process including skipDay
 # skipDay=1, numDay=2 will give a result of 1 day trading which is the previous day before yesterday
 
-skipDay=0  # number of day skipped, 0 for nothing
-numDay=100         # Total number of day, including skipDay
+skipDay=1  # number of day skipped, 0 for nothing
+numDay=3         # Total number of day, including skipDay
 dirChina='D:\\user\\Documents\\Python\\chinaconnect\\*.txt'
 dirHK='D:\\user\\Documents\\Python\\hkconnect\\*.txt'
 focus_list_hk = [5, 27, 66, 388, 700, 772, 799, 1211, 1299, 2318, 2628, 6030]
